@@ -1,14 +1,17 @@
 import { useFinderStore } from '@/store/finder'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { SearchIcon } from './icons'
 
 const Finder = () => {
   const [search, setSearch] = useState('')
+  const searchInput = useRef(null)
   const { setFinder } = useFinderStore((state) => state)
 
   const handleSearch = (e) => {
     e.preventDefault()
+    if (search.length === 0) return
     setFinder(search)
+    searchInput.current.blur()
   }
 
   return (
@@ -26,6 +29,9 @@ const Finder = () => {
             placeholder="Ingresar término a buscar"
             onChange={(e) => setSearch(e.target.value.replace(/\s/g, '').toLowerCase())}
             value={search}
+            ref={searchInput}
+            autoFocus
+            autoComplete='off'
           />
         </div>
       </form>
